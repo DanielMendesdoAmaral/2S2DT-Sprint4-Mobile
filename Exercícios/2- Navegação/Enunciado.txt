@@ -5,6 +5,6 @@ Capacidades:
 
 Tipo: Somativa
 
-Nesta atividade os alunos devem criar um fluxo de telas, 
+Nesta atividade você deve criar um fluxo de telas, 
  - Caso não esteja logado deve aparecer a tela de login/ cadastrar usuário ou resetar senha
  -  Caso esteja logado deve aparecer uma tela de listagem
