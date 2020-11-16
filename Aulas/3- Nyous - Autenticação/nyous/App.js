@@ -50,7 +50,7 @@ export default function App() {
     <NavigationContainer>
       {/*Este headerShown faz com que aquela barra com título não exista, por que na página de Login fica feio.*/}
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Login" component={Home} />
         {/*Quando o usuário estiver autenticado, renderizará o componente Autenticado, que possibilitará ao usuário ir para outras páginas. Se ele não estiver autenticado, só poderá ir para o Login.*/}
         <Stack.Screen name="Autenticado" component={Autenticado} />
       </Stack.Navigator>

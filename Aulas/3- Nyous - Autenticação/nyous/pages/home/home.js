@@ -1,11 +1,36 @@
 import React, {useState, useEffect} from "react";
-import {StyleSheet, Text, View, Image} from "react-native";
+import {StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList} from "react-native";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//Componente para renderizar os eventos da api. Esse componente é renderizado para cada item da api, e recebe como parâmetro um objeto com todos os dados de um evento.
+const Item = ({nome, urlImagem, link, dataInicial, dataFinal, descricao, nomeCategoria}) => {
+    return (
+        <View style={styles.card}>
+            <Image
+                style={styles.cardImg}
+                source={urlImagem}
+            />
+            <View style={{padding:15}}>  
+                <Text style={styles.cardTitulo}>{nome}</Text>
+                <Text style={styles.cardDescricao}>{descricao}</Text>
+                <Text style={styles.cardDetails}>{nomeCategoria}</Text>
+                <Text style={styles.cardDetails}>{dataInicial}</Text>
+                <Text style={[styles.cardDetails, {marginBottom: 10}]}>{dataFinal}</Text> {/*Passando um array de styles.*/}
+            </View>
+            <TouchableOpacity style={{alignItems: "center", marginBottom: 20}}><Text style={{borderRadius: 10, backgroundColor: "magenta", padding: 5, color: "white", textAlign: "center", width: "50%"}}>Ir para o link do evento</Text></TouchableOpacity>
+        </View>
+    )
+}
 
 const Home = () => {
     const [token, setToken] = useState("");
     const [eventos, setEventos] = useState([]);
+
+    useEffect(() => {
+        pegarToken;
+        listar();
+    }, []); //Se quiser chamar o useEffect toda vez que atualizar o valor de alguma variável, insira a variável neste array. Se quiser só uma vez, quando a página for inicializada, deixe-o vazio.
 
     const pegarToken = async () => {
         try {
@@ -29,32 +54,20 @@ const Home = () => {
         }
     }
 
-    useEffect(() => {
-        pegarToken;
-        listar();
-    }, []); //Se quiser chamar o useEffect toda vez que atualizar o valor de alguma variável, insira a variável neste array. Se quiser só uma vez, quando a página for inicializada, deixe-o vazio.
+    //Chama o componente Item, passando os atributos.
+    const renderItem = ({ item }) => (
+        <Item nome={item.nome} urlImagem={item.urlImagem} link={item.link} dataInicial={item.dataInicial} dataFinal={item.dataFinal} descricao={item.descricao} nomeCategoria={item.categoria.nome} />
+    );
 
     return (
         <View style={styles.container}>
-            <Text style={{color: "white", fontSize: 20, marginBottom: 25}}>Confira os próximos eventos!</Text>
-            {console.log(eventos)}
-            {
-                eventos.map((evento, index) => {
-                    return (
-                        <View key={index} style={styles.card}>
-                            <Image
-                                source={evento.urlImagem}
-                                style={styles.cardImg}
-                            />
-                            <Text style={styles.cardTitulo}>{evento.nome}</Text>
-                            <Text style={styles.cardDescricao}>{evento.descricao}</Text>
-                            <Text style={styles.cardDetails}>{evento.categoria.nome}</Text>
-                            <Text style={styles.cardDetails}>{evento.dataInicial}</Text>
-                            <Text style={styles.cardDetails}>{evento.dataFinal}</Text>
-                        </View>
-                    )
-                })
-            }
+            <Text style={{color: "white", fontSize: 20, marginBottom: 25, marginTop: 25}}>Confira os próximos eventos!</Text>
+            <FlatList
+                data={eventos} //Vai armazenar os dados a serem inseridos na lista.
+                renderItem={renderItem} //Pega cada item de "data" e faz a ação especificada. No caso, joga na função renderItem
+                keyExtractor={item => item.id} //Coloca um identificador para cada item da lista.
+                style={{width: "90%", maxWidth: 350}}
+            />
         </View>
     )
 }
@@ -68,9 +81,7 @@ const styles = StyleSheet.create({
     },
     card: {
         borderColor: "magenta", 
-        borderWidth: 1, 
-        width: "80%", 
-        maxWidth: 400, 
+        borderWidth: 1,
         borderRadius: 10, 
         marginBottom: 20
     },
@@ -84,8 +95,7 @@ const styles = StyleSheet.create({
         color: "white", 
         fontWeight: "700", 
         fontSize: 20, 
-        textAlign: "center", 
-        marginTop: 10
+        textAlign: "center"
     },
     cardDescricao: {
         color: "#DEDEDE", 
