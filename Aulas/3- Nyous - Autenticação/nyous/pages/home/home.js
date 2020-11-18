@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, FlatList} from "react-native";
+import {StyleSheet, Text, View, Image, TouchableOpacity, FlatList, Linking} from "react-native";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,7 +18,9 @@ const Item = ({nome, urlImagem, link, dataInicial, dataFinal, descricao, nomeCat
                 <Text style={styles.cardDetails}>{dataInicial}</Text>
                 <Text style={[styles.cardDetails, {marginBottom: 10}]}>{dataFinal}</Text> {/*Passando um array de styles.*/}
             </View>
-            <TouchableOpacity style={{alignItems: "center", marginBottom: 20}}><Text style={{borderRadius: 10, backgroundColor: "magenta", padding: 5, color: "white", textAlign: "center", width: "50%"}}>Ir para o link do evento</Text></TouchableOpacity>
+            <TouchableOpacity style={{alignItems: "center", marginBottom: 20}} onPress={() => Linking.openURL(link)} /*Use isso para redirecionar para um link na web */>
+                <Text style={{borderRadius: 10, backgroundColor: "magenta", padding: 5, color: "white", textAlign: "center", width: "50%"}}>Ir para o link do evento</Text>
+            </TouchableOpacity>
         </View>
     )
 }
