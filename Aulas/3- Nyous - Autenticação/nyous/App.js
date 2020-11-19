@@ -9,6 +9,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import Login from "./pages/login/login";
 import Home from "./pages/home/home";
+import Timeline from "./pages/timeline/timeline";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -50,7 +51,7 @@ export default function App() {
     <NavigationContainer>
       {/*Este headerShown faz com que aquela barra com título não exista, por que na página de Login fica feio.*/}
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Login" component={Home} />
+        <Stack.Screen name="Login" component={Timeline} />
         {/*Quando o usuário estiver autenticado, renderizará o componente Autenticado, que possibilitará ao usuário ir para outras páginas. Se ele não estiver autenticado, só poderá ir para o Login.*/}
         <Stack.Screen name="Autenticado" component={Autenticado} />
       </Stack.Navigator>

@@ -1,24 +1,48 @@
-import React, {useEffect, useState} from "react";
-import {View, TouchableOpacity, Text, Image, Button} from "react-native";
-//API baixada de expo.io -> API Reference, para pegar imagens da câmera do celular.
+import React, {useState, useEffect} from "react";
+import {Text, View, Image, TouchableOpacity, Button} from "react-native";
 import { Camera } from 'expo-camera';
 
-const CameraApi = () => {
+const Timeline = () => {
+    const [imagem, setImagem] = useState(null);
     const [permissao, setPermissao] = useState(null);
-    const [tipo, setTipo] = useState(Camera.Constants.Type.back); //Pega a câmera traseira.
-    const [imagemUri, setImagemUri] = useState(null);
+    const [tipo, setTipo] = useState(Camera.Constants.Type.back);
 
     useEffect(() => {
         (async () => {
             const { status } = await Camera.requestPermissionsAsync();
-            //Se o status for granted, permissao = true, senão, false.
             setPermissao(status === 'granted');
         })();
-    }, []);
+    }, []); 
 
     const tirarFoto = async () => {
         let foto = await camera.takePictureAsync();
-        setImagemUri(foto.uri);
+        setImagem(foto);
+    }
+
+    const postar = async () => {
+        try {
+            let formData = new FormData();
+            const fileURL = imagem.uri;
+            const fileName = fileURL.split("/").pop();
+            const ext = fileURL.split(".").pop();
+
+            formData.append("arquivo", {
+                uri: fileURL,
+                name: fileName,
+                type: "image/"+ext
+            });
+
+            const response = await fetch("http://192.168.1.104:5000/api/upload", {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+
+            console.log("data: " + JSON.stringify(data))
+        } 
+        catch (error) {
+            console.log(error);
+        }
     }
 
     if (permissao === null) 
@@ -55,10 +79,11 @@ const CameraApi = () => {
                     </TouchableOpacity>
                 </View>
             </Camera>
-            {imagemUri && <Image source={{uri: imagemUri}} style={{height: 300}}/>}
             <Button title="Tirar foto" onPress={() => tirarFoto()}></Button>
+            {imagem && <Image source={{uri: imagem.uri}} style={{height: 300}}/>}
+            {imagem && <><Text>Deseja postar essa foto? </Text><Button title="Postar" onPress={()=>postar()}></Button></>}
         </View>
     )
 }
 
-export default CameraApi;
+export default Timeline;
