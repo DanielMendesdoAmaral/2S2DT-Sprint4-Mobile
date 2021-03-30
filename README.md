@@ -1,1 +1,1 @@
-# 2S2DT-Sprint4-Mobile
+Aulas/exercícios da sprint 4 (mobile) do 2º semestre do curso Técnico de Desenvolvimento de Sistemas.
